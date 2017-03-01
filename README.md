@@ -47,4 +47,4 @@ groovyScript("\"${_1} ${_2}\".toString()", "Hello", "World")
 ```
 * arguments can be other variables or predefined functions
 * access arguments with ***"_1"***, ***"_2"***, ***"_3"*** etc.
-* escape ***"*** with ***\\***
+* escape **"** with **\\**
