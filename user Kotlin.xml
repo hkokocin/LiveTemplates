@@ -1,129 +1,62 @@
 <templateSet group="user Kotlin">
-  <template name="test" value="@org.junit.Test&#10;    fun $NAME$() {&#10;        $END$&#10;    }&#10;" description="insert a test method" toReformat="true" toShortenFQNames="true">
-    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_CLASS" value="true" />
-    </context>
-  </template>
-  <template name="mock" value="@org.mockito.Mock lateinit private var $NAME$: $TYPE$" toReformat="true" toShortenFQNames="true">
-    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="NAME" expression="decapitalize(TYPE)" defaultValue="" alwaysStopAt="false" />
-    <context>
-      <option name="KOTLIN_CLASS" value="true" />
-    </context>
-  </template>
-  <template name="before" value="@org.junit.Before&#10;fun setUp(){&#10;    $END$&#10;}" toReformat="true" toShortenFQNames="true">
-    <context>
-      <option name="KOTLIN_CLASS" value="true" />
-    </context>
-  </template>
-  <template name="test_class" value="@org.junit.runner.RunWith(org.powermock.modules.junit4.PowerMockRunner::class)&#10;@org.powermock.core.classloader.annotations.PrepareForTest()&#10;class $NAME$ {&#10;    $END$&#10;}" toReformat="true" toShortenFQNames="true">
-    <variable name="NAME" expression="fileNameWithoutExtension()" defaultValue="" alwaysStopAt="false" />
-    <context>
-      <option name="KOTLIN_TOPLEVEL" value="true" />
-    </context>
-  </template>
-  <template name="injectable" value="class $NAME$ @javax.inject.Inject constructor(){&#10;    $END$    &#10;}" description="create an injectable class" toReformat="false" toShortenFQNames="true">
-    <variable name="NAME" expression="fileNameWithoutExtension()" defaultValue="" alwaysStopAt="false" />
-    <context>
-      <option name="KOTLIN_TOPLEVEL" value="true" />
-    </context>
-  </template>
-  <template name="inject_field" value="@javax.inject.Inject lateinit var $NAME$: $TYPE$" toReformat="true" toShortenFQNames="true">
-    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="NAME" expression="decapitalize(TYPE)" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_CLASS" value="true" />
-    </context>
-  </template>
-  <template name="class_to_test_with_mocks" value="@org.mockito.InjectMocks private lateinit var classToTest: $NAME$" toReformat="false" toShortenFQNames="true">
-    <variable name="NAME" expression="groovyScript(&quot;return _1.replace(\&quot;Test\&quot;, \&quot;\&quot;)&quot;, fileNameWithoutExtension())" defaultValue="" alwaysStopAt="false" />
-    <context>
-      <option name="KOTLIN_CLASS" value="true" />
-    </context>
-  </template>
-  <template name="class_to_test" value="private val classToTest = $NAME$()" toReformat="false" toShortenFQNames="true">
-    <variable name="NAME" expression="groovyScript(&quot;return _1.replace(\&quot;Test\&quot;, \&quot;\&quot;)&quot;, fileNameWithoutExtension())" defaultValue="" alwaysStopAt="false" />
-    <context>
-      <option name="KOTLIN_CLASS" value="true" />
-    </context>
-  </template>
-  <template name="adapterpart" value="class $CLASS_NAME$ @javax.inject.Inject constructor(&#10;        private val widgetProvider: javax.inject.Provider&lt;$WIDGET_TYPE$&gt;,&#10;        private val context: de.weltn24.news.common.view.BaseActivity&#10;) : de.weltn24.news.home.widgets.recyclerview.RecyclerViewAdapterPart {&#10;&#10;    override fun getItemType(): kotlin.reflect.KClass&lt;*&gt; {&#10;        return $DATA_TYPE$::class&#10;    }&#10;&#10;    @Suppress(&quot;UNCHECKED_CAST&quot;)&#10;    override fun onBindViewHolder(holder: android.support.v7.widget.RecyclerView.ViewHolder, item: Any) {&#10;        val viewHolder = holder as de.weltn24.news.common.view.widget.WidgetViewHolder&lt;$WIDGET_TYPE$&gt;&#10;        val data = item as $DATA_TYPE$&#10;        viewHolder.widget.setData($END$)&#10;    }&#10;&#10;    override fun onCreateViewHolder(parent: android.view.ViewGroup?): android.support.v7.widget.RecyclerView.ViewHolder {&#10;        val widget = widgetProvider.get()&#10;        return de.weltn24.news.common.view.widget.WidgetViewHolder(widget, widget.getView(context, parent))&#10;    }&#10;}" toReformat="false" toShortenFQNames="true">
-    <variable name="WIDGET_TYPE" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="CLASS_NAME" expression="fileNameWithoutExtension()" defaultValue="" alwaysStopAt="false" />
-    <variable name="DATA_TYPE" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_TOPLEVEL" value="true" />
-    </context>
-  </template>
-  <template name="adapterpart_test" value="@org.junit.runner.RunWith(org.powermock.modules.junit4.PowerMockRunner::class)&#10;@org.powermock.core.classloader.annotations.PrepareForTest($WIDGET_TYPE$::class)&#10;class $TEST_CLASS_NAME$ {&#10;&#10;    @org.mockito.Mock lateinit private var widgetProvider: javax.inject.Provider&lt;$WIDGET_TYPE$&gt;&#10;    @org.mockito.Mock lateinit private var widget: $WIDGET_TYPE$&#10;    @org.mockito.Mock lateinit private var context: de.weltn24.news.common.view.BaseActivity&#10;    @org.mockito.Mock lateinit private var parent: android.view.ViewGroup&#10;    @org.mockito.Mock lateinit private var view: android.view.View&#10;&#10;    @org.mockito.InjectMocks private lateinit var classToTest: $CLASS_TO_TEST$&#10;&#10;    @org.junit.Test&#10;    fun doesHandleTeasers() {&#10;        // when&#10;        val result = classToTest.getItemType()&#10;&#10;        // then&#10;        assertThat(result, isEqualTo&lt;KClass&lt;*&gt;&gt;($DATA_TYPE$::class))&#10;    }&#10;&#10;    @Suppress(&quot;UNCHECKED_CAST&quot;)&#10;    @org.junit.Test&#10;    fun canCreateViewHolder() {&#10;        // given&#10;        given(widgetProvider.get()).willReturn(widget)&#10;        given(widget.getView(context, parent)).willReturn(view)&#10;&#10;        // when&#10;        val holder = classToTest.onCreateViewHolder(parent) as WidgetViewHolder&lt;$WIDGET_TYPE$&gt;&#10;&#10;        // then&#10;        assertThat(holder.widget, isEqualTo(widget))&#10;        assertThat(holder.itemView, isEqualTo(view))&#10;    }&#10;&#10;    @org.junit.Test&#10;    fun canUpdateWidget() {&#10;        // given&#10;        val data = $DATA_TYPE$()&#10;&#10;        // when&#10;        classToTest.onBindViewHolder(WidgetViewHolder(widget, view), data)&#10;&#10;        // then&#10;        verify(widget).setData(data)&#10;    }&#10;&#10;}" toReformat="false" toShortenFQNames="true">
-    <variable name="CLASS_TO_TEST" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="TEST_CLASS_NAME" expression="fileNameWithoutExtension()" defaultValue="" alwaysStopAt="false" />
-    <variable name="WIDGET_TYPE" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="DATA_TYPE" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_TOPLEVEL" value="true" />
-    </context>
-  </template>
-  <template name="cstr" value="val $NAME$ = &quot;$NAME$&quot;" toReformat="false" toShortenFQNames="true">
-    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN" value="true" />
-    </context>
-  </template>
-  <template name="given" value="com.nhaarman.mockito_kotlin.given($CONDITION$).willReturn($RETURN_VALUE$)" description="add a given statement" toReformat="false" toShortenFQNames="true">
-    <variable name="CONDITION" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="RETURN_VALUE" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_STATEMENT" value="true" />
-    </context>
-  </template>
-  <template name="suppress" value="@kotlin.Suppress($WHAT$)" toReformat="true" toShortenFQNames="true">
-    <variable name="WHAT" expression="enum(&quot;\&quot;UNCHECKED_CAST\&quot;&quot;, &quot;\&quot;UNUSED_PARAMETER\&quot;&quot;, &quot;\&quot;SENSELESS_COMPARISON\&quot;&quot;, &quot;\&quot;IMPLICIT_CAST_TO_ANY\&quot;&quot;, &quot;\&quot;CAST_NEVER_SUCCEEDS\&quot;&quot;)" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN" value="true" />
-      <option name="OC_EXPRESSION_C" value="false" />
-      <option name="OC_DECLARATION_CPP" value="false" />
-      <option name="c" value="false" />
-      <option name="OC_STATEMENT_C" value="false" />
-      <option name="cpp" value="false" />
-      <option name="OC_DECLARATION_C" value="false" />
-      <option name="OC_EXPRESSION_CPP" value="false" />
-      <option name="OC_STATEMENT_CPP" value="false" />
-    </context>
-  </template>
-  <template name="mock_invoke_lambda" value="given($FUNCTION_CALL$(any())).will { (it.arguments[0] as () -&gt; Unit).invoke() }" toReformat="false" toShortenFQNames="true">
-    <variable name="FUNCTION_CALL" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_STATEMENT" value="true" />
-    </context>
-  </template>
-  <template name="then" value="com.nhaarman.mockito_kotlin.then($MOCK$).should($MODIFIER$).$METHOD_CALL$" description="add a then statement" toReformat="false" toShortenFQNames="true">
-    <variable name="MOCK" expression="kotlinVariable()" defaultValue="" alwaysStopAt="true" />
-    <variable name="MODIFIER" expression="enum(&quot;&quot;, &quot;times(1)&quot;, &quot;times(2)&quot;, &quot;times(3)&quot;, &quot;times(4)&quot;)" defaultValue="" alwaysStopAt="true" />
-    <variable name="METHOD_CALL" expression="complete()" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_STATEMENT" value="true" />
-    </context>
-  </template>
-  <template name="mock2" value="@org.mockito.Mock lateinit private var $NAME$: $TYPE$" toReformat="true" toShortenFQNames="true">
-    <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="NAME" expression="groovyScript(&quot;String result = _1 == null ? \&quot;\&quot; : _1.split(\&quot;\\\\.\&quot;).last().split(\&quot;&lt;\&quot;).first();result == \&quot;\&quot; ? \&quot;\&quot; : result.substring(0, 1).toLowerCase() + result.substring(1)&quot;, TYPE)" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_STATEMENT" value="true" />
-      <option name="KOTLIN_CLASS" value="true" />
-    </context>
-  </template>
-  <template name="when_" value="classToTest.$CALL$" toReformat="false" toShortenFQNames="true">
-    <variable name="CALL" expression="complete()" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_STATEMENT" value="true" />
-    </context>
-  </template>
-  <template name="when_with_result" value="val result = classToTest.$CALL$" toReformat="false" toShortenFQNames="true">
-    <variable name="CALL" expression="complete()" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="KOTLIN_STATEMENT" value="true" />
-    </context>
-  </template>
+<template name="wtf" value="// todo tell hendrik to remove (t)his shit" toReformat="true" toShortenFQNames="true">
+  <context>
+    <option name="KOTLIN" value="true" />
+  </context>
+</template>
+<template name="then" value="com.nhaarman.mockito_kotlin.then($MOCK$).should($MODIFIER$).$METHOD_CALL$" description="add a then statement" toReformat="false" toShortenFQNames="true">
+  <variable name="MOCK" expression="kotlinVariable()" defaultValue="" alwaysStopAt="true" />
+  <variable name="MODIFIER" expression="enum(&quot;&quot;, &quot;times(1)&quot;, &quot;times(2)&quot;, &quot;times(3)&quot;, &quot;times(4)&quot;)" defaultValue="" alwaysStopAt="true" />
+  <variable name="METHOD_CALL" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_STATEMENT" value="true" />
+  </context>
+</template>
+<template name="test" value="@org.junit.Test&#10;    fun $NAME$() {&#10;        $END$&#10;    }&#10;" description="insert a test method" toReformat="true" toShortenFQNames="true">
+  <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="before" value="@org.junit.Before&#10;fun setUp(){&#10;    $END$&#10;}" toReformat="true" toShortenFQNames="true">
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="class_to_test" value="val classToTest = $NAME$($PARAMETERS$)" toReformat="false" toShortenFQNames="true">
+  <variable name="NAME" expression="groovyScript(&quot;return _1.replace(\&quot;Test\&quot;, \&quot;\&quot;)&quot;, fileNameWithoutExtension())" defaultValue="" alwaysStopAt="false" />
+  <variable name="PARAMETERS" expression="completeSmart()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="given" value="com.nhaarman.mockito_kotlin.given($CONDITION$).willReturn($RETURN_VALUE$)" description="add a given statement" toReformat="false" toShortenFQNames="true">
+  <variable name="CONDITION" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <variable name="RETURN_VALUE" expression="completeSmart()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_STATEMENT" value="true" />
+  </context>
+</template>
+<template name="mock" value="val $NAME$: $TYPE$ = com.nhaarman.mockito_kotlin.mock()" toReformat="false" toShortenFQNames="true">
+  <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+  <variable name="NAME" expression="groovyScript(&quot;String result = _1 == null ? \&quot;\&quot; : _1.split(\&quot;\\\\.\&quot;).last().split(\&quot;&lt;\&quot;).first();result = result == \&quot;\&quot; ? \&quot;\&quot; : result.substring(0, 1).toLowerCase() + result.substring(1);result.startsWith(&quot;(&quot;) ? &quot;callback&quot; : result&quot;, TYPE)" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_STATEMENT" value="true" />
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="suppress" value="@kotlin.Suppress($WHAT$)" toReformat="true" toShortenFQNames="true">
+  <variable name="WHAT" expression="enum(&quot;\&quot;UNCHECKED_CAST\&quot;&quot;, &quot;\&quot;UNUSED_PARAMETER\&quot;&quot;, &quot;\&quot;SENSELESS_COMPARISON\&quot;&quot;, &quot;\&quot;IMPLICIT_CAST_TO_ANY\&quot;&quot;, &quot;\&quot;CAST_NEVER_SUCCEEDS\&quot;&quot;)" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN" value="true" />
+    <option name="OC_EXPRESSION_C" value="false" />
+    <option name="OC_DECLARATION_CPP" value="false" />
+    <option name="c" value="false" />
+    <option name="OC_STATEMENT_C" value="false" />
+    <option name="cpp" value="false" />
+    <option name="OC_DECLARATION_C" value="false" />
+    <option name="OC_EXPRESSION_CPP" value="false" />
+    <option name="OC_STATEMENT_CPP" value="false" />
+  </context>
+</template>
 </templateSet>
