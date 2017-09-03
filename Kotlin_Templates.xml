@@ -1,0 +1,84 @@
+<templateSet group="_Kotlin">
+<template name="after" value="@org.junit.After&#10;fun tearDown(){&#10;    $END$&#10;}" description="" toReformat="true" toShortenFQNames="true">
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="before" value="@org.junit.Before&#10;fun setUp(){&#10;    $END$&#10;}" description="" toReformat="true" toShortenFQNames="true">
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="class_to_test" value="val classToTest = $NAME$($PARAMETERS$)" description="" toReformat="false" toShortenFQNames="true">
+  <variable name="NAME" expression="groovyScript(&quot;return _1.replace(\&quot;Test\&quot;, \&quot;\&quot;)&quot;, fileNameWithoutExtension())" defaultValue="" alwaysStopAt="false" />
+  <variable name="PARAMETERS" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="given" value="com.nhaarman.mockito_kotlin.given($CONDITION$).willReturn($RETURN_VALUE$)" description="add a given statement" toReformat="false" toShortenFQNames="true">
+  <variable name="CONDITION" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <variable name="RETURN_VALUE" expression="completeSmart()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_STATEMENT" value="true" />
+  </context>
+</template>
+<template name="given_init" value="com.nhaarman.mockito_kotlin.given{ it.$CONDITION$ }.willReturn($RETURN_VALUE$)" description="add a given statement" toReformat="false" toShortenFQNames="true">
+  <variable name="CONDITION" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <variable name="RETURN_VALUE" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_STATEMENT" value="true" />
+  </context>
+</template>
+<template name="mock" value="val $NAME$: $TYPE$ = com.nhaarman.mockito_kotlin.mock()" description="" toReformat="false" toShortenFQNames="true">
+  <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+  <variable name="NAME" expression="groovyScript(&quot;String result = _1 == null ? \&quot;\&quot; : _1.split(\&quot;\\\\.\&quot;).last().split(\&quot;&lt;\&quot;).first();result = result == \&quot;\&quot; ? \&quot;\&quot; : result.substring(0, 1).toLowerCase() + result.substring(1);result.startsWith(\&quot;(\&quot;) ? \&quot;callback\&quot; : result&quot;, TYPE)" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+    <option name="KOTLIN_STATEMENT" value="true" />
+  </context>
+</template>
+<template name="mock_extended" value="val $NAME$: $TYPE$ = com.nhaarman.mockito_kotlin.mock{&#10;    com.nhaarman.mockito_kotlin.given{it.$CONDITION$}.willReturn($RETURN_VALUE$)&#10;}" description="" toReformat="false" toShortenFQNames="true">
+  <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true" />
+  <variable name="NAME" expression="groovyScript(&quot;String result = _1 == null ? \&quot;\&quot; : _1.split(\&quot;\\\\.\&quot;).last().split(\&quot;&lt;\&quot;).first();result = result == \&quot;\&quot; ? \&quot;\&quot; : result.substring(0, 1).toLowerCase() + result.substring(1);result.startsWith(\&quot;(\&quot;) ? \&quot;callback\&quot; : result&quot;, TYPE)" defaultValue="" alwaysStopAt="true" />
+  <variable name="CONDITION" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <variable name="RETURN_VALUE" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+    <option name="KOTLIN_STATEMENT" value="true" />
+  </context>
+</template>
+<template name="suppress" value="@kotlin.Suppress($WHAT$)" description="" toReformat="true" toShortenFQNames="true">
+  <variable name="WHAT" expression="enum(&quot;\&quot;UNCHECKED_CAST\&quot;&quot;, &quot;\&quot;UNUSED_PARAMETER\&quot;&quot;, &quot;\&quot;SENSELESS_COMPARISON\&quot;&quot;, &quot;\&quot;IMPLICIT_CAST_TO_ANY\&quot;&quot;, &quot;\&quot;CAST_NEVER_SUCCEEDS\&quot;&quot;)" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN" value="true" />
+    <option name="OC_DECLARATION_C" value="false" />
+    <option name="OC_DECLARATION_CPP" value="false" />
+    <option name="OC_EXPRESSION_C" value="false" />
+    <option name="OC_EXPRESSION_CPP" value="false" />
+    <option name="OC_STATEMENT_C" value="false" />
+    <option name="OC_STATEMENT_CPP" value="false" />
+    <option name="c" value="false" />
+    <option name="cpp" value="false" />
+  </context>
+</template>
+<template name="test" value="@org.junit.Test&#10;    fun $NAME$() {&#10;        $END$&#10;    }&#10;" description="insert a test method" toReformat="true" toShortenFQNames="true">
+  <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_CLASS" value="true" />
+  </context>
+</template>
+<template name="then" value="com.nhaarman.mockito_kotlin.then($MOCK$).should($MODIFIER$).$METHOD_CALL$" description="add a then statement" toReformat="false" toShortenFQNames="true">
+  <variable name="MOCK" expression="kotlinVariable()" defaultValue="" alwaysStopAt="true" />
+  <variable name="MODIFIER" expression="enum(&quot;&quot;, &quot;times(1)&quot;, &quot;times(2)&quot;, &quot;times(3)&quot;, &quot;times(4)&quot;)" defaultValue="" alwaysStopAt="true" />
+  <variable name="METHOD_CALL" expression="complete()" defaultValue="" alwaysStopAt="true" />
+  <context>
+    <option name="KOTLIN_STATEMENT" value="true" />
+  </context>
+</template>
+<template name="wtf" value="// todo tell hendrik to remove (t)his shit" description="" toReformat="true" toShortenFQNames="true">
+  <context>
+    <option name="KOTLIN" value="true" />
+  </context>
+</template>
+</templateSet>
